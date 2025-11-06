@@ -1,5 +1,4 @@
-# Modstitch Stonecutter Template
+# Retro Crash Screen
 
-This is the recommended template for using Modstitch.
-
-Refer to the modstitch documentation for setup instructions.
+Brings back the old-school crash screen
+retrocrash
