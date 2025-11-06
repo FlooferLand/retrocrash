@@ -15,9 +15,6 @@ pluginManagement {
         // Stonecutter
         maven("https://maven.kikugie.dev/releases")
         maven("https://maven.kikugie.dev/snapshots")
-
-        // Modstitch
-        maven("https://maven.isxander.dev/releases")
     }
 }
 
@@ -37,15 +34,12 @@ stonecutter {
         fun mc(mcVersion: String, name: String = mcVersion, loaders: Iterable<String>) =
             loaders.forEach { vers("$name-$it", mcVersion) }
 
-        // Configure your targets here!
-        mc("1.21.4", loaders = listOf("fabric", "neoforge"))
-        mc("1.20.1", loaders = listOf("forge"))
+        // Targets
+        mc("1.21.1", loaders = listOf("fabric", "neoforge"))
 
-        // This is the default target.
-        // https://stonecutter.kikugie.dev/stonecutter/guide/setup#settings-settings-gradle-kts
-        vcsVersion = "1.21.4-fabric"
+        vcsVersion = "1.21.1-fabric"
     }
 }
 
-rootProject.name = "Example Mod"
+rootProject.name = "Retro Crash"
 

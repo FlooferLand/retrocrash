@@ -2,6 +2,7 @@ modLoader = "javafml"
 loaderVersion = "[2,)"
 issueTrackerURL = "${mod_issue_tracker}"
 license = "${mod_license}"
+clientSideOnly = true
 
 [[mods]]
     modId = "${mod_id}"
@@ -14,7 +15,7 @@ license = "${mod_license}"
     modId = "neoforge"
     type = "required"
     ordering = "NONE"
-    side = "BOTH"
+    side = "CLIENT"
 
 [[dependencies.${mod_id}]]
     modId = "minecraft"
