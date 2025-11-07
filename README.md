@@ -1,5 +1,7 @@
 # Retro Crash Screen
 
+Mod ID: `retrocrash`
+
 Brings back the old-school beta crash screen.
 
 ## Source code / how it works
@@ -29,3 +31,7 @@ feel free to do so by making a [pull request](https://github.com/FlooferLand/ret
 
 If your change/addition is huge, please consider making an issue before-hand as I might not merge it if it doesn't match the project's vision.
 _(ex: if you're trying to add a more sophisticated crash screen, see the [Crash Assistant](https://github.com/KostromDan/Crash-Assistant) mod and/or contribute to it instead)_
+
+If you'd like to test the crashing, you can either trigger it yourself by holding down the vanilla
+F3+C, or add a `.dev_crash` file at the root of the repo if you're on the Fabric config and the loader will crash immediately.
+
