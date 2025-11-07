@@ -26,7 +26,7 @@ modstitch {
 
     metadata {
         modId = "retrocrash"
-        modName = "Retro crash screen"
+        modName = "Retro Crash Screen"
         modVersion = "1.0.0"
         modGroup = "com.flooferland"
         modAuthor = "FlooferLand"
@@ -97,7 +97,8 @@ stonecutter {
     consts(
         "fabric" to (constraint == "fabric"),
         "neoforge" to (constraint == "neoforge"),
-        "forge" to (constraint == "forge")
+        "forge" to (constraint == "forge"),
+        "crash" to (file(rootDir.resolve(".dev_crash")).exists())
     )
 }
 
