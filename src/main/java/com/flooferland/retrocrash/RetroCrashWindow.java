@@ -37,7 +37,7 @@ public final class RetroCrashWindow {
 		var mc = minecraft.getWindow();
 
 		frame = new JFrame("Minecraft") ;
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(mc.getWidth(), mc.getHeight());
 		frame.setLocation(mc.getX(), mc.getY());
 
@@ -70,7 +70,7 @@ public final class RetroCrashWindow {
 			}
 		};
 		textArea.setText(report.getFriendlyReport(ReportType.CRASH));
-		textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 18));
+		textArea.setFont(new Font(Font.MONOSPACED, Font.BOLD, 15));
 		textArea.setForeground(Color.BLACK);
 		textArea.setBackground(Color.WHITE);
 		textArea.setEditable(false);
@@ -87,7 +87,7 @@ public final class RetroCrashWindow {
 		var content = new JPanel();
 		content.setLayout(new BorderLayout());
 		content.setBackground(new Color(46, 52, 68));
-		content.setBorder(new EmptyBorder(10, 35, 115, 35));
+		content.setBorder(new EmptyBorder(10, 45, 125, 45));
 		content.add(scrollPane, BorderLayout.CENTER);
 
 		// Window stuff
