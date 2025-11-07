@@ -1,5 +1,7 @@
 # Retro Crash Screen
 
+Mod ID: `retrocrash`
+
 Brings back the old-school beta crash screen.
 
 ## Source code / how it works
