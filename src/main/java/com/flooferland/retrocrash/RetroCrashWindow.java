@@ -26,7 +26,7 @@ public final class RetroCrashWindow {
 	public static void prepare() {
 		System.setProperty("java.awt.headless", "false");
 
-		var isMinceraft = RandomSource.create().nextIntBetweenInclusive(0, 20) == 3;
+		var isMinceraft = RandomSource.create().nextIntBetweenInclusive(0, 60) == 13;
 		gameName = isMinceraft ? "minceraft" : "minecraft";
 		gameNameCapitalized = gameName.substring(0, 1).toUpperCase() + gameName.substring(1);
 	}
@@ -124,8 +124,15 @@ public final class RetroCrashWindow {
 		RetroCrashWindow.minecraft = minecraft;
 		RetroCrashWindow.report = report;
 
+		RetroCrashMod.LOGGER.info("SPAWNING!");
+
 		// Shutting off Minecraft's window to replace it
-		long glfwWindow = minecraft.getWindow().getWindow();
+		var window = minecraft.getWindow();
+		long glfwWindow = //? if >1.21.7 {
+		/*window.handle();
+		*///?} else {
+		window.getWindow();
+		//?}
 		if (glfwWindow > 0) {
 			GLFW.glfwHideWindow(glfwWindow);
 		}

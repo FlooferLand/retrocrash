@@ -1,5 +1,5 @@
 plugins {
-    id("dev.isxander.modstitch.base") version "0.5.12"
+    id("dev.isxander.modstitch.base") version "latest.release"
 }
 
 fun prop(name: String, consumer: (prop: String) -> Unit) {
@@ -12,16 +12,19 @@ val minecraft = property("deps.minecraft") as String;
 modstitch {
     minecraftVersion = minecraft
 
-    // Alternatively use stonecutter.eval if you have a lot of versions to target.
-    // https://stonecutter.kikugie.dev/stonecutter/guide/setup#checking-versions
-    javaTarget = when (minecraft) {
-        "1.20.1" -> 17
-        "1.21.1" -> 21
-        else -> throw IllegalArgumentException("Please store the java version for ${property("deps.minecraft")} in build.gradle.kts!")
+    javaVersion = when {
+        stonecutter.eval(minecraft, ">=1.20.5") -> 21
+        else -> 17
     }
 
+    // https://parchmentmc.org/docs/getting-started
     parchment {
-        prop("deps.parchment") { mappingsVersion = it }
+        mappingsVersion = when (minecraft) {
+            "1.21.1" -> "2024.11.17"
+            "1.21.7" -> "2025.07.18"
+            "1.21.9" -> "2025.10.05"
+            else -> error("No mappings specified for version $minecraft")
+        }
     }
 
     metadata {
@@ -31,16 +34,19 @@ modstitch {
         modGroup = "com.flooferland"
         modAuthor = "FlooferLand"
 
-        fun <K, V> MapProperty<K, V>.populate(block: MapProperty<K, V>.() -> Unit) {
+        fun <V: Any> MapProperty<String, V>.populate(block: MapProperty<String, V>.() -> Unit) {
             block()
         }
 
         replacementProperties.populate {
             put("mod_issue_tracker", "https://github.com/FlooferLand/retrocrash/issues")
+            put("minecraft_range", property("deps.minecraft_range") as String)
 
             // https://minecraft.wiki/w/Pack_format
             put("pack_format", when (property("deps.minecraft")) {
                 "1.21.1" -> 48
+                "1.21.7", "1.21.8" -> 81
+                "1.21.9" -> 88
                 else -> throw IllegalArgumentException("Please store the resource pack version for ${property("deps.minecraft")} in build.gradle.kts! https://minecraft.wiki/w/Pack_format")
             }.toString())
         }
@@ -48,31 +54,18 @@ modstitch {
 
     // Fabric Loom (Fabric)
     loom {
-        fabricLoaderVersion = "0.16.10"
-        configureLoom {
-
-        }
+        fabricLoaderVersion = property("deps.fabric_loader") as String
     }
 
     // ModDevGradle (NeoForge, Forge, Forgelike)
     moddevgradle {
-        enable {
-            prop("deps.forge") { forgeVersion = it }
-            prop("deps.neoform") { neoFormVersion = it }
-            prop("deps.neoforge") { neoForgeVersion = it }
-            prop("deps.mcp") { mcpVersion = it }
-        }
+        prop("deps.forge") { forgeVersion = it }
+        prop("deps.neoform") { neoFormVersion = it }
+        prop("deps.neoforge") { neoForgeVersion = it }
+        prop("deps.mcp") { mcpVersion = it }
 
         // Configures client and server runs for MDG, it is not done by default
         defaultRuns()
-
-        // This block configures the `neoforge` extension that MDG exposes by default,
-        // you can configure MDG like normal from here
-        configureNeoforge {
-            runs.all {
-                disableIdeRun()
-            }
-        }
     }
 
     mixin {

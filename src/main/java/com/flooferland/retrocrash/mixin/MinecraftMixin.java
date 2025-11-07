@@ -1,5 +1,6 @@
 package com.flooferland.retrocrash.mixin;
 
+import com.flooferland.retrocrash.RetroCrashMod;
 import com.flooferland.retrocrash.RetroCrashWindow;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
@@ -12,6 +13,13 @@ import java.io.File;
 
 @Mixin(value = Minecraft.class, priority = 500)
 public class MinecraftMixin {
+	//? if crash {
+	@Inject(method = "run", at = @At("HEAD"))
+	private static void initDevCrash(CallbackInfo ci) {
+		RetroCrashMod.sayGoodbye();
+	}
+	//?}
+
 	@Inject(method = "emergencySaveAndCrash", at = @At("HEAD"))
 	private static void beforeSave(CrashReport crashReport, CallbackInfo ci) {
 		RetroCrashWindow.prepare();

@@ -36,6 +36,8 @@ stonecutter {
 
         // Targets
         mc("1.21.1", loaders = listOf("fabric", "neoforge"))
+        mc("1.21.7", loaders = listOf("fabric", "neoforge"))
+        mc("1.21.9", loaders = listOf("fabric", "neoforge"))
 
         vcsVersion = "1.21.1-fabric"
     }

@@ -9,5 +9,8 @@
         "main": [
           "com.flooferland.retrocrash.loaders.fabric.FabricEntrypoint"
         ]
+    },
+    "depends": {
+        "minecraft": "${minecraft_range}"
     }
 }

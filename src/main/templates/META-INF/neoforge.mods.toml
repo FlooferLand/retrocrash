@@ -19,4 +19,5 @@ clientSideOnly = true
 
 [[dependencies.${mod_id}]]
     modId = "minecraft"
+    versionRange = "${minecraft_range}"
     type = "required"

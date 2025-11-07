@@ -1,6 +1,8 @@
 package com.flooferland.retrocrash;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.CrashReport;
+import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -18,7 +20,6 @@ public class RetroCrashMod {
 	@Nullable
 	@SuppressWarnings("all")
 	public static void sayGoodbye() {
-		int[] array = null;
-		LOGGER.info(String.valueOf((double) array[99]), (Throwable) null);
+		Minecraft.getInstance().emergencySaveAndCrash(new CrashReport("Crash", new Exception()));
 	}
 }
