@@ -15,18 +15,20 @@ import java.io.File;
 public class MinecraftMixin {
 	//? if crash {
 	@Inject(method = "run", at = @At("HEAD"))
-	private static void initDevCrash(CallbackInfo ci) {
+	private void initDevCrash(CallbackInfo ci) {
 		RetroCrashMod.sayGoodbye();
 	}
 	//?}
 
-	@Inject(method = "emergencySaveAndCrash", at = @At("HEAD"))
-	private static void beforeSave(CrashReport crashReport, CallbackInfo ci) {
-		RetroCrashWindow.prepare();
+	//? if >1.21 {
+	@Inject(method = "crash", at = @At("HEAD"))
+	private static void beforeExit(Minecraft minecraft, File gameDirectory, CrashReport report, CallbackInfo ci) {
+		RetroCrashWindow.spawn(Minecraft.getInstance(), report);
 	}
-
-	@Inject(method = "crash", at = @At(value = "HEAD", target = "Ljava/lang/System;exit(I)V"))
-	private static void beforeExit(Minecraft minecraft, File file, CrashReport report, CallbackInfo ci) {
-		RetroCrashWindow.spawn(minecraft, report);
+	//?} else {
+	/*@Inject(method = "crash", at = @At("HEAD"))
+	private static void beforeExit(CrashReport report, CallbackInfo ci) {
+		RetroCrashWindow.spawn(Minecraft.getInstance(), report);
 	}
+	*///?}
 }

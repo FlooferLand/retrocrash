@@ -20,6 +20,12 @@ public class RetroCrashMod {
 	@Nullable
 	@SuppressWarnings("all")
 	public static void sayGoodbye() {
-		Minecraft.getInstance().emergencySaveAndCrash(new CrashReport("Crash", new Exception()));
+		var minecraft = Minecraft.getInstance();
+		//? if <1.21 {
+		/*minecraft.emergencySave();
+		minecraft.crash(new CrashReport("Crash", new Exception()));
+		*///?} else {
+		minecraft.emergencySaveAndCrash(new CrashReport("Crash", new Exception()));
+		//?}
 	}
 }

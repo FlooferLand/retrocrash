@@ -20,6 +20,7 @@ modstitch {
     // https://parchmentmc.org/docs/getting-started
     parchment {
         mappingsVersion = when (minecraft) {
+            "1.20.1" -> "2023.09.03"
             "1.21.1" -> "2024.11.17"
             "1.21.7" -> "2025.07.18"
             "1.21.9" -> "2025.10.05"
@@ -44,8 +45,9 @@ modstitch {
 
             // https://minecraft.wiki/w/Pack_format
             put("pack_format", when (property("deps.minecraft")) {
+                "1.20.1" -> 15
                 "1.21.1" -> 48
-                "1.21.7", "1.21.8" -> 81
+                "1.21.7" -> 81
                 "1.21.9" -> 88
                 else -> throw IllegalArgumentException("Please store the resource pack version for ${property("deps.minecraft")} in build.gradle.kts! https://minecraft.wiki/w/Pack_format")
             }.toString())
@@ -68,12 +70,18 @@ modstitch {
         defaultRuns()
     }
 
+    runs {
+        register("retrocrash") {
+            client()
+        }
+    }
+
     mixin {
         // You do not need to specify mixins in any mods.json/toml file if this is set to
         // true, it will automatically be generated.
         addMixinsToModManifest = true
 
-        configs.register("retrocrash")
+        configs.create("retrocrash")
 
         // Most of the time you wont ever need loader specific mixins.
         // If you do, simply make the mixin file and add it like so for the respective loader:

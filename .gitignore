@@ -1,4 +1,6 @@
 .dev_crash
+**/logs/
+**/downloads/
 
 .gradle
 build/

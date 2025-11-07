@@ -1,9 +1,9 @@
 package com.flooferland.retrocrash;
 
+import com.flooferland.retrocrash.util.ResLoc;
+import com.flooferland.retrocrash.util.RetroCrashUtils;
 import net.minecraft.CrashReport;
-import net.minecraft.ReportType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -26,7 +26,7 @@ public final class RetroCrashWindow {
 	public static void prepare() {
 		System.setProperty("java.awt.headless", "false");
 
-		var isMinceraft = RandomSource.create().nextIntBetweenInclusive(0, 60) == 13;
+		var isMinceraft = RandomSource.create().nextIntBetweenInclusive(0, 100) == 13;
 		gameName = isMinceraft ? "minceraft" : "minecraft";
 		gameNameCapitalized = gameName.substring(0, 1).toUpperCase() + gameName.substring(1);
 	}
@@ -69,7 +69,7 @@ public final class RetroCrashWindow {
 				super.paintComponent(g);
 			}
 		};
-		textArea.setText(report.getFriendlyReport(ReportType.CRASH));
+		textArea.setText(RetroCrashUtils.getFriendlyReport(report));
 		textArea.setFont(new Font(Font.MONOSPACED, Font.BOLD, 15));
 		textArea.setForeground(Color.BLACK);
 		textArea.setBackground(Color.WHITE);
@@ -108,7 +108,7 @@ public final class RetroCrashWindow {
 		if (minecraft == null) return null;
 		var resources = minecraft.getResourceManager();
 
-		var logo = resources.getResource(ResourceLocation.withDefaultNamespace("textures/gui/title/" + gameName + ".png")).orElse(null);
+		var logo = resources.getResource(ResLoc.ofVanilla("textures/gui/title/" + gameName + ".png")).orElse(null);
 		if (logo == null) return null;
 		try (var stream = logo.open()) {
 			Image image = ImageIO.read(stream);
@@ -123,6 +123,7 @@ public final class RetroCrashWindow {
 	public static void spawn(Minecraft minecraft, CrashReport report) {
 		RetroCrashWindow.minecraft = minecraft;
 		RetroCrashWindow.report = report;
+		prepare();
 
 		RetroCrashMod.LOGGER.info("SPAWNING!");
 
@@ -138,7 +139,6 @@ public final class RetroCrashWindow {
 		}
 
 		// Running the window
-		prepare();
 		var thread = new Thread(() -> {
 			try {
 				SwingUtilities.invokeAndWait(RetroCrashWindow::run);
