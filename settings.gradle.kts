@@ -41,5 +41,5 @@ stonecutter {
     }
 }
 
-rootProject.name = "Retro Crash"
+rootProject.name = "Retrocrash"
 
