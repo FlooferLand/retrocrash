@@ -13,8 +13,8 @@ public class RetroCrashMod {
 		RetroCrashWindow.prepare();
 
 		//? if crash {
-	    LOGGER.warn("Crash debugging enabled. The game will now crash, toodles.");
-		//?}
+	    /*LOGGER.warn("Crash debugging enabled. The game will now crash, toodles.");
+		*///?}
     }
 
 	@Nullable

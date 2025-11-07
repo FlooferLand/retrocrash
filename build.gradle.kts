@@ -31,9 +31,11 @@ modstitch {
     metadata {
         modId = "retrocrash"
         modName = "Retro Crash Screen"
+        modDescription = "Brings back the old crash screen"
         modVersion = "1.0.0"
         modGroup = "com.flooferland"
         modAuthor = "FlooferLand"
+        modLicense = "LGPL"
 
         fun <V: Any> MapProperty<String, V>.populate(block: MapProperty<String, V>.() -> Unit) {
             block()
@@ -77,17 +79,8 @@ modstitch {
     }
 
     mixin {
-        // You do not need to specify mixins in any mods.json/toml file if this is set to
-        // true, it will automatically be generated.
         addMixinsToModManifest = true
-
         configs.create("retrocrash")
-
-        // Most of the time you wont ever need loader specific mixins.
-        // If you do, simply make the mixin file and add it like so for the respective loader:
-        // if (isLoom) configs.register("retrocrash-fabric")
-        // if (isModDevGradleRegular) configs.register("retrocrash-neoforge")
-        // if (isModDevGradleLegacy) configs.register("retrocrash-forge")
     }
 }
 

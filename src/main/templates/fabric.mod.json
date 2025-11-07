@@ -5,6 +5,7 @@
     "version": "${mod_version}",
     "description": "${mod_description}",
     "environment": "client",
+    "icon": "icon.png",
     "entrypoints": {
         "main": [
           "com.flooferland.retrocrash.loaders.fabric.FabricEntrypoint"
