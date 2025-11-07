@@ -33,5 +33,5 @@ If your change/addition is huge, please consider making an issue before-hand as 
 _(ex: if you're trying to add a more sophisticated crash screen, see the [Crash Assistant](https://github.com/KostromDan/Crash-Assistant) mod and/or contribute to it instead)_
 
 If you'd like to test the crashing, you can either trigger it yourself by holding down the vanilla
-F3+C, or add a `.dev_crash` file at the root of the repo if you're on the Fabric config and the loader will crash immediately.
+F3+C, or add a `.dev_crash` file at the root of the repo and the loader will crash immediately.
 

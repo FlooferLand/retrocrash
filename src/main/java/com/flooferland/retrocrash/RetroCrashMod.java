@@ -1,7 +1,6 @@
 package com.flooferland.retrocrash;
 
 import com.mojang.logging.LogUtils;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -11,16 +10,9 @@ public class RetroCrashMod {
     public static void initialize() {
 		RetroCrashWindow.prepare();
 
-		// ONLY FOR TESTING BWAAAAAA
-		//? if crash && fabric {
+		//? if crash {
 	    LOGGER.warn("Crash debugging enabled. The game will now crash, toodles.");
-		var initTime = System.currentTimeMillis();
-		ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-	        if (System.currentTimeMillis() > initTime + 300) {
-		        sayGoodbye();
-	        }
-		});
-	    //?}
+		//?}
     }
 
 	@Nullable
