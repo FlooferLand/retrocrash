@@ -52,13 +52,19 @@ public final class RetroCrashWindow {
 		frame.setContentPane(mainPanel);
 
 		// Logo
-		var logo = new JLabel(gameName.toUpperCase());
+		var logo = new JLabel();
 		var logoImage = getLogo();
 		if (logoImage != null) {
 			logo.setIconTextGap(0);
 			logo.setText(null);
 			logo.setIcon(new ImageIcon(logoImage));
-		} else if (error != null) {
+		} else {
+			logo.setText(gameName.toUpperCase());
+			logo.setForeground(new Color(145, 145, 145));
+			logo.setFont(new Font(Font.MONOSPACED, Font.BOLD + Font.ITALIC, 64));
+			logo.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+		if (error != null) {
 			RetroCrashMod.LOGGER.error(
 				String.format("Unable to load %s's logo: ", gameNameCapitalized),
 				error
