@@ -1,5 +1,8 @@
+import dev.isxander.modstitch.publishing.msPublishing
+
 plugins {
     id("dev.isxander.modstitch.base") version "latest.release"
+    id("dev.isxander.modstitch.publishing") version "latest.release"
 }
 
 fun prop(name: String, consumer: (prop: String) -> Unit) {
@@ -84,16 +87,73 @@ modstitch {
     }
 }
 
+prop("deps.forge") {
+    tasks.named("reobfJar") {
+        dependsOn("processSources")
+    }
+}
+
 // Stonecutter constants for mod loaders.
 // See https://stonecutter.kikugie.dev/stonecutter/guide/comments#condition-constants
 val constraint: String = name.split("-")[1]
+val crash = file(rootDir.resolve(".dev_crash")).exists()
 stonecutter {
     consts(
         "fabric" to (constraint == "fabric"),
         "neoforge" to (constraint == "neoforge"),
         "forge" to (constraint == "forge"),
-        "crash" to (file(rootDir.resolve(".dev_crash")).exists())
+        "crash" to (crash)
     )
+}
+
+msPublishing {
+    if (crash) error("The crash debugging is enabled!")
+    maven {
+        publications {
+            named<MavenPublication>("mod") {
+                afterEvaluate {
+                    groupId = "${modstitch.metadata.modId.get()}-${project.name}"
+                    artifactId = modstitch.metadata.modId.get()
+                }
+            }
+        }
+    }
+
+    val modVersion = modstitch.metadata.modVersion.get()
+    mpp {
+        // Utils
+        fun versionList(prop: String) = findProperty(prop)?.toString()
+            ?.split(',')
+            ?.map { it.trim() }
+            ?: emptyList()
+
+        // Release
+        val stableMcVersions = versionList("deps.minecraft_list")
+        displayName.set("$modVersion for ${stableMcVersions.joinToString(", ") }")
+        changelog.set(
+            rootProject.file("changelogs/$modVersion.md")
+                .takeIf { it.exists() }
+                ?.readText()
+                ?: "No changelog provided."
+        )
+        type.set(when {
+            modVersion.contains("alpha") -> ALPHA
+            modVersion.contains("beta") -> BETA
+            else -> STABLE
+        })
+
+        modrinth {
+            accessToken = System.getenv("MODRINTH_TOKEN")
+            projectId = "4NoveVAN"
+            minecraftVersions.addAll(stableMcVersions)
+        }
+
+        publishOptions {
+            version = stonecutter.current.version
+        }
+
+        // dryRun = true
+    }
 }
 
 // All dependencies should be specified through modstitch's proxy configuration.
