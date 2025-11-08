@@ -36,6 +36,8 @@ stonecutter {
 
         // Targets
         // TODO: Add legacy forge back in
+        mc("1.16.5", loaders = listOf("fabric"))
+        mc("1.18.2", loaders = listOf("fabric"))
         mc("1.19.2", loaders = listOf("fabric"))
         mc("1.20.1", loaders = listOf("fabric"))
         mc("1.21.1", loaders = listOf("fabric", "neoforge"))

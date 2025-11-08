@@ -23,6 +23,8 @@ modstitch {
     // https://parchmentmc.org/docs/getting-started
     parchment {
         mappingsVersion = when (minecraft) {
+            "1.16.5" -> "2022.03.06"
+            "1.18.2" -> "2022.11.06"
             "1.19.2" -> "2022.11.27"
             "1.20.1" -> "2023.09.03"
             "1.21.1" -> "2024.11.17"
@@ -51,6 +53,8 @@ modstitch {
 
             // https://minecraft.wiki/w/Pack_format
             put("pack_format", when (property("deps.minecraft")) {
+                "1.16.5" -> 6
+                "1.18.2" -> 9
                 "1.19.2" -> 10
                 "1.20.1" -> 15
                 "1.21.1" -> 48
