@@ -8,26 +8,27 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.File;
+import static com.flooferland.retrocrash.RetroCrashMod.sayGoodbye;
+/*? if >1.21 */ //import java.io.File;
 
 @Mixin(value = Minecraft.class, priority = 500)
 public class MinecraftMixin {
 	//? if crash {
-	/*@Inject(method = "run", at = @At("HEAD"))
+	@Inject(method = "run", at = @At("HEAD"))
 	private void initDevCrash(CallbackInfo ci) {
-		RetroCrashMod.sayGoodbye();
+		sayGoodbye();
 	}
-	*///?}
+	//?}
 
 	//? if >1.21 {
-	@Inject(method = "crash", at = @At("HEAD"))
+	/*@Inject(method = "crash", at = @At("HEAD"))
 	private static void beforeExit(Minecraft minecraft, File gameDirectory, CrashReport report, CallbackInfo ci) {
 		RetroCrashWindow.spawn(Minecraft.getInstance(), report);
 	}
-	//?} else {
-	/*@Inject(method = "crash", at = @At("HEAD"))
+	*///?} else {
+	@Inject(method = "crash", at = @At("HEAD"))
 	private static void beforeExit(CrashReport report, CallbackInfo ci) {
 		RetroCrashWindow.spawn(Minecraft.getInstance(), report);
 	}
-	*///?}
+	//?}
 }

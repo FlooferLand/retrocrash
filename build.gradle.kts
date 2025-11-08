@@ -23,6 +23,7 @@ modstitch {
     // https://parchmentmc.org/docs/getting-started
     parchment {
         mappingsVersion = when (minecraft) {
+            "1.19.2" -> "2022.11.27"
             "1.20.1" -> "2023.09.03"
             "1.21.1" -> "2024.11.17"
             "1.21.7" -> "2025.07.18"
@@ -35,7 +36,7 @@ modstitch {
         modId = "retrocrash"
         modName = "Retro Crash Screen"
         modDescription = "Brings back the old crash screen"
-        modVersion = "1.0.0"
+        modVersion = "1.0.1"
         modGroup = "com.flooferland"
         modAuthor = "FlooferLand"
         modLicense = "LGPL"
@@ -50,6 +51,7 @@ modstitch {
 
             // https://minecraft.wiki/w/Pack_format
             put("pack_format", when (property("deps.minecraft")) {
+                "1.19.2" -> 10
                 "1.20.1" -> 15
                 "1.21.1" -> 48
                 "1.21.7" -> 81
@@ -87,27 +89,23 @@ modstitch {
     }
 }
 
-prop("deps.forge") {
-    tasks.named("reobfJar") {
-        dependsOn("processSources")
-    }
-}
-
 // Stonecutter constants for mod loaders.
 // See https://stonecutter.kikugie.dev/stonecutter/guide/comments#condition-constants
 val constraint: String = name.split("-")[1]
 val crash = file(rootDir.resolve(".dev_crash")).exists()
 stonecutter {
-    consts(
-        "fabric" to (constraint == "fabric"),
-        "neoforge" to (constraint == "neoforge"),
-        "forge" to (constraint == "forge"),
-        "crash" to (crash)
+    constants.putAll(
+        mapOf(
+            "fabric" to (constraint == "fabric"),
+            "neoforge" to (constraint == "neoforge"),
+            "forge" to (constraint == "forge"),
+            "crash" to (crash)
+        )
     )
 }
 
 msPublishing {
-    if (crash) error("The crash debugging is enabled!")
+    if (crash) println("The crash debugging is enabled!")
     maven {
         publications {
             named<MavenPublication>("mod") {

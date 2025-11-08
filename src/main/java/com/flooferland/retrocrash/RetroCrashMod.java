@@ -13,8 +13,8 @@ public class RetroCrashMod {
 		RetroCrashWindow.prepare();
 
 		//? if crash {
-	    /*LOGGER.warn("Crash debugging enabled. The game will now crash, toodles.");
-		*///?}
+	    LOGGER.warn("Crash debugging enabled. The game will now crash, toodles.");
+		//?}
     }
 
 	@Nullable
@@ -22,10 +22,10 @@ public class RetroCrashMod {
 	public static void sayGoodbye() {
 		var minecraft = Minecraft.getInstance();
 		//? if <1.21 {
-		/*minecraft.emergencySave();
+		minecraft.emergencySave();
 		minecraft.crash(new CrashReport("Crash", new Exception()));
-		*///?} else {
-		minecraft.emergencySaveAndCrash(new CrashReport("Crash", new Exception()));
-		//?}
+		//?} else {
+		/*minecraft.emergencySaveAndCrash(new CrashReport("Crash", new Exception()));
+		*///?}
 	}
 }

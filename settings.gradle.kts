@@ -19,7 +19,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.6+"
+    id("dev.kikugie.stonecutter") version "latest.release"
 }
 
 stonecutter {
@@ -36,6 +36,7 @@ stonecutter {
 
         // Targets
         // TODO: Add legacy forge back in
+        mc("1.19.2", loaders = listOf("fabric"))
         mc("1.20.1", loaders = listOf("fabric"))
         mc("1.21.1", loaders = listOf("fabric", "neoforge"))
         mc("1.21.7", loaders = listOf("fabric", "neoforge"))

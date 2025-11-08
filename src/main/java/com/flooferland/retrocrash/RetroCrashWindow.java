@@ -14,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public final class RetroCrashWindow {
@@ -22,8 +23,10 @@ public final class RetroCrashWindow {
 	static @Nullable JFrame frame;
 	static String gameName;
 	static String gameNameCapitalized;
+	static @Nullable Throwable error;
 
 	public static void prepare() {
+		// Workaround to fix a Swing crash (Minecraft's main thread runs headless and this breaks it)
 		System.setProperty("java.awt.headless", "false");
 
 		var isMinceraft = RandomSource.create().nextIntBetweenInclusive(0, 100) == 13;
@@ -55,6 +58,11 @@ public final class RetroCrashWindow {
 			logo.setIconTextGap(0);
 			logo.setText(null);
 			logo.setIcon(new ImageIcon(logoImage));
+		} else if (error != null) {
+			RetroCrashMod.LOGGER.error(
+				String.format("Unable to load %s's logo: ", gameNameCapitalized),
+				error
+			);
 		}
 		logo.setHorizontalAlignment(SwingConstants.CENTER);
 		logo.setBorder(new EmptyBorder(15, 0, 0, 0));
@@ -111,14 +119,45 @@ public final class RetroCrashWindow {
 		var logo = resources.getResource(ResLoc.ofVanilla("textures/gui/title/" + gameName + ".png")).orElse(null);
 		if (logo == null) return null;
 		try (var stream = logo.open()) {
-			Image image = ImageIO.read(stream);
-			image = image.getScaledInstance(300, 75, Image.SCALE_SMOOTH);
-			return image;
+			BufferedImage image = ImageIO.read(stream);
+			//? if <1.20 {
+				/*try { image = mergeLogo(image); }
+				catch (Exception throwable) {
+					error = throwable;
+					return null;
+				}
+			*///? }
+			return image.getScaledInstance(310, 80, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
-			RetroCrashMod.LOGGER.error("Unable to load {}'s logo: ", gameNameCapitalized);
+			error = e;
 		}
 		return null;
 	}
+
+	//? if <1.20 {
+	/*static BufferedImage mergeLogo(BufferedImage full) throws RasterFormatException, IllegalArgumentException {
+		final int partHeight = 45;
+		final int minecPartWidth = 154;
+		final int raftPartWidth = 118;
+		final int combinedWidth = minecPartWidth + raftPartWidth;
+
+		var minecPart = full.getSubimage(0, 0, minecPartWidth, partHeight);
+		var raftPart = full.getSubimage(0, partHeight, raftPartWidth, partHeight);
+
+		// Merging back together the logo, since Mojang used to split it into 2 separate UV rects for some reason
+		var merged = new BufferedImage(combinedWidth, partHeight + 30, BufferedImage.TYPE_INT_ARGB);
+		var graphics = merged.createGraphics();
+		graphics.drawImage(minecPart, 0, 0, null);
+		graphics.drawImage(raftPart, minecPartWidth, 0, null);
+		graphics.dispose();
+
+		// Returning the image the same size as the other resize code expects
+		var scaled = merged.getScaledInstance(1024, 256, Image.SCALE_DEFAULT);
+		var buffered = new BufferedImage(1024, 256, BufferedImage.TYPE_INT_ARGB);
+		buffered.createGraphics().drawImage(scaled, 0, 0, null);
+		return buffered;
+	}
+	*///? }
 
 	public static void spawn(Minecraft minecraft, CrashReport report) {
 		RetroCrashWindow.minecraft = minecraft;
