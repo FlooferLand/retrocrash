@@ -4,7 +4,6 @@ import com.flooferland.retrocrash.util.ResLoc;
 import com.flooferland.retrocrash.util.RetroCrashUtils;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
@@ -16,6 +15,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 
 public final class RetroCrashWindow {
 	static @Nullable Minecraft minecraft;
@@ -29,7 +30,7 @@ public final class RetroCrashWindow {
 		// Workaround to fix a Swing crash (Minecraft's main thread runs headless and this breaks it)
 		System.setProperty("java.awt.headless", "false");
 
-		var isMinceraft = RandomSource.create().nextIntBetweenInclusive(0, 100) == 13;
+		var isMinceraft = RetroCrashUtils.randomInt(0, 100) == 13;
 		gameName = isMinceraft ? "minceraft" : "minecraft";
 		gameNameCapitalized = gameName.substring(0, 1).toUpperCase() + gameName.substring(1);
 	}
@@ -122,17 +123,30 @@ public final class RetroCrashWindow {
 		if (minecraft == null) return null;
 		var resources = minecraft.getResourceManager();
 
-		var logo = resources.getResource(ResLoc.ofVanilla("textures/gui/title/" + gameName + ".png")).orElse(null);
+		var logoId = ResLoc.ofVanilla("textures/gui/title/" + gameName + ".png");
+		InputStream logo;
+		try {
+			//? if >1.19 {
+			logo = Objects.requireNonNull(resources.getResource(logoId).orElse(null)).open();
+			//? } else {
+			/*logo = resources.getResource(logoId).getInputStream();
+			*///? }
+		} catch (IOException exception) {
+			error = exception;
+			return null;
+		}
+
+		//noinspection ConstantValue
 		if (logo == null) return null;
-		try (var stream = logo.open()) {
-			BufferedImage image = ImageIO.read(stream);
+		try {
+			BufferedImage image = ImageIO.read(logo);
 			//? if <1.20 {
-				try { image = mergeLogo(image); }
+				/*try { image = mergeLogo(image); }
 				catch (Exception throwable) {
 					error = throwable;
 					return null;
 				}
-			//? }
+			*///? }
 			return image.getScaledInstance(310, 80, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
 			error = e;
@@ -141,7 +155,7 @@ public final class RetroCrashWindow {
 	}
 
 	//? if <1.20 {
-	static BufferedImage mergeLogo(BufferedImage full) throws RasterFormatException, IllegalArgumentException {
+	/*static BufferedImage mergeLogo(BufferedImage full) throws RasterFormatException, IllegalArgumentException {
 		final int partHeight = 45;
 		final int minecPartWidth = 154;
 		final int raftPartWidth = 118;
@@ -163,7 +177,7 @@ public final class RetroCrashWindow {
 		buffered.createGraphics().drawImage(scaled, 0, 0, null);
 		return buffered;
 	}
-	//? }
+	*///? }
 
 	public static void spawn(Minecraft minecraft, CrashReport report) {
 		RetroCrashWindow.minecraft = minecraft;

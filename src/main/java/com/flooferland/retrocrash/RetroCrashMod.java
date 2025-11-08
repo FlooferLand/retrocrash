@@ -5,9 +5,13 @@ import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+//? } else {
+/*import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+*///? }
 
 public class RetroCrashMod {
-    public static final Logger LOGGER = LogUtils.getLogger();
+	public static final Logger LOGGER = /*? if >1.17 { */ LogUtils.getLogger()/*? } else { */ /*LogManager.getLogger() *//*? } */;
 
     public static void initialize() {
 		RetroCrashWindow.prepare();

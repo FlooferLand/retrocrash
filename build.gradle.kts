@@ -83,6 +83,7 @@ modstitch {
 
     runs {
         register("retrocrash") {
+            environmentVariables.put("DEV_CRASH", "1")
             client()
         }
     }
@@ -96,14 +97,14 @@ modstitch {
 // Stonecutter constants for mod loaders.
 // See https://stonecutter.kikugie.dev/stonecutter/guide/comments#condition-constants
 val constraint: String = name.split("-")[1]
-val crash = file(rootDir.resolve(".dev_crash")).exists()
+val crash = System.getenv("DEV_CRASH") == "1"
 stonecutter {
     constants.putAll(
         mapOf(
             "fabric" to (constraint == "fabric"),
             "neoforge" to (constraint == "neoforge"),
             "forge" to (constraint == "forge"),
-            "crash" to (crash)
+            "crash" to crash
         )
     )
 }
@@ -131,7 +132,7 @@ msPublishing {
 
         // Release
         val stableMcVersions = versionList("deps.minecraft_list")
-        displayName.set("$modVersion for ${stableMcVersions.joinToString(", ") }")
+        displayName.set("$modVersion for ~$minecraft")
         changelog.set(
             rootProject.file("changelogs/$modVersion.md")
                 .takeIf { it.exists() }
@@ -154,7 +155,7 @@ msPublishing {
             version = stonecutter.current.version
         }
 
-        // dryRun = true
+        if (crash) dryRun = true
     }
 }
 

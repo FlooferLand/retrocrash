@@ -1,7 +1,3 @@
-.dev_crash
-**/logs/
-**/downloads/
-
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
