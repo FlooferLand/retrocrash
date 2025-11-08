@@ -127,12 +127,12 @@ public final class RetroCrashWindow {
 		try (var stream = logo.open()) {
 			BufferedImage image = ImageIO.read(stream);
 			//? if <1.20 {
-				/*try { image = mergeLogo(image); }
+				try { image = mergeLogo(image); }
 				catch (Exception throwable) {
 					error = throwable;
 					return null;
 				}
-			*///? }
+			//? }
 			return image.getScaledInstance(310, 80, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
 			error = e;
@@ -141,7 +141,7 @@ public final class RetroCrashWindow {
 	}
 
 	//? if <1.20 {
-	/*static BufferedImage mergeLogo(BufferedImage full) throws RasterFormatException, IllegalArgumentException {
+	static BufferedImage mergeLogo(BufferedImage full) throws RasterFormatException, IllegalArgumentException {
 		final int partHeight = 45;
 		final int minecPartWidth = 154;
 		final int raftPartWidth = 118;
@@ -163,7 +163,7 @@ public final class RetroCrashWindow {
 		buffered.createGraphics().drawImage(scaled, 0, 0, null);
 		return buffered;
 	}
-	*///? }
+	//? }
 
 	public static void spawn(Minecraft minecraft, CrashReport report) {
 		RetroCrashWindow.minecraft = minecraft;
