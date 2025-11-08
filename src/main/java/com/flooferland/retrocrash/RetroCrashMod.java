@@ -1,5 +1,6 @@
 package com.flooferland.retrocrash;
 
+import com.flooferland.retrocrash.util.RetroCrashUtils;
 import com.mojang.logging.LogUtils;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
@@ -15,15 +16,15 @@ public class RetroCrashMod {
 
     public static void initialize() {
 		RetroCrashWindow.prepare();
-
-		//? if crash {
-	    LOGGER.warn("Crash debugging enabled. The game will now crash, toodles.");
-		//?}
+		if (RetroCrashUtils.devShouldCrash())
+	        LOGGER.warn("Crash debugging enabled. The game will now crash, toodles.");
     }
 
 	@Nullable
 	@SuppressWarnings("all")
 	public static void sayGoodbye() {
+		if (!RetroCrashUtils.devShouldCrash()) return;
+		
 		var minecraft = Minecraft.getInstance();
 		//? if <1.21 {
 		/*minecraft.emergencySave();

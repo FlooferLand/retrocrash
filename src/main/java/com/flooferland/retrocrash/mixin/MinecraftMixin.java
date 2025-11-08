@@ -1,6 +1,7 @@
 package com.flooferland.retrocrash.mixin;
 
 import com.flooferland.retrocrash.RetroCrashWindow;
+import com.flooferland.retrocrash.util.RetroCrashUtils;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,13 +15,6 @@ import static com.flooferland.retrocrash.RetroCrashMod.sayGoodbye;
 
 @Mixin(value = Minecraft.class, priority = 500)
 public class MinecraftMixin {
-	//? if crash {
-	@Inject(method = "run", at = @At("HEAD"))
-	private void initDevCrash(CallbackInfo ci) {
-		sayGoodbye();
-	}
-	//?}
-
 	//? if >1.21 {
 	@Inject(method = "crash", at = @At("HEAD"))
 	private static void beforeExit(Minecraft minecraft, File gameDirectory, CrashReport report, CallbackInfo ci) {
@@ -32,4 +26,10 @@ public class MinecraftMixin {
 		RetroCrashWindow.spawn(Minecraft.getInstance(), report);
 	}
 	*///?}
+	
+	@Inject(method = "run", at = @At("HEAD"))
+	private void initDevCrash(CallbackInfo ci) {
+		if (RetroCrashUtils.devShouldCrash())
+			sayGoodbye();
+	}
 }

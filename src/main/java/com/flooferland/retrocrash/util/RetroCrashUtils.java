@@ -3,6 +3,8 @@ package com.flooferland.retrocrash.util;
 import net.minecraft.CrashReport;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public final class RetroCrashUtils {
 	/*? if >1.19 */ static net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create();
 
@@ -21,5 +23,9 @@ public final class RetroCrashUtils {
 		//? } else {
 		/*return org.apache.commons.lang3.RandomUtils.nextInt(min, max);
 		*///? }
+	}
+
+	public static boolean devShouldCrash() {
+		return Objects.equals(System.getenv("DEV_CRASH"), "1");
 	}
 }
