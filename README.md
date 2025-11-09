@@ -35,3 +35,5 @@ _(ex: if you're trying to add a more sophisticated crash screen, see the [Crash 
 If you'd like to test the crashing, you can either trigger it yourself by holding down the vanilla
 F3+C, or add a `.dev_crash` file at the root of the repo and the loader will crash immediately.
 
+## Screenshots
+![Screenshot of the crash screen](./screenshot.png)
