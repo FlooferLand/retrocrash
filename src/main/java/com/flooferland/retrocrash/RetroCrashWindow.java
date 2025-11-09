@@ -167,7 +167,7 @@ public final class RetroCrashWindow {
 	}
 
 	//? if <1.20 {
-	/*static BufferedImage mergeLogo(BufferedImage full) throws RasterFormatException, IllegalArgumentException {
+	/*static BufferedImage mergeLogo(BufferedImage full) throws IllegalArgumentException {
 		final int partHeight = 45;
 		final int minecPartWidth = 154;
 		final int raftPartWidth = 118;

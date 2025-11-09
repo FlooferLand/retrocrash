@@ -16,7 +16,7 @@ public class BasedGson<T> {
 	protected Gson internal = new GsonBuilder()
 		.serializeNulls()
 		.setLenient()
-		.disableJdkUnsafe()
+		/*? if >1.20 */.disableJdkUnsafe()
 		.setPrettyPrinting()
 		.excludeFieldsWithoutExposeAnnotation()
 		.create();
@@ -31,7 +31,7 @@ public class BasedGson<T> {
 		return internal.fromJson(reader, type);
 	}
 
-	public String serialize(T data) throws IOException {
+	public String serialize(T data) {
 		var writer = new StringWriter();
 		var jsonWriter = new JsonWriter(writer);
 		jsonWriter.setIndent("\t");
@@ -44,8 +44,8 @@ public class BasedGson<T> {
 		if (comment != null) {
 			object.addProperty("comment", comment);
 		}
-		for (String key : built.keySet()) {
-			object.add(key, built.get(key));
+		for (var set : built.entrySet()) {
+			object.add(set.getKey(), set.getValue());
 		}
 
 		internal.toJson(object, jsonWriter);

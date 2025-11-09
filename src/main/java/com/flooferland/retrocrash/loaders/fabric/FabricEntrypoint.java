@@ -10,4 +10,4 @@ public class FabricEntrypoint implements ModInitializer {
         RetroCrashMod.initialize();
     }
 }
-//?}
+//? }

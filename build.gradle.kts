@@ -11,6 +11,10 @@ fun prop(name: String, consumer: (prop: String) -> Unit) {
 }
 
 val minecraft = property("deps.minecraft") as String;
+fun versionedProp(name: String): String {
+    val name = "deps.$minecraft.$name"
+    return findProperty(name) as? String ?: error("Unable to find versioned property '$name' for Minecraft $minecraft")
+}
 
 modstitch {
     minecraftVersion = minecraft
@@ -20,25 +24,15 @@ modstitch {
         else -> 17
     }
 
-    // https://parchmentmc.org/docs/getting-started
     parchment {
-        mappingsVersion = when (minecraft) {
-            "1.16.5" -> "2022.03.06"
-            "1.18.2" -> "2022.11.06"
-            "1.19.2" -> "2022.11.27"
-            "1.20.1" -> "2023.09.03"
-            "1.21.1" -> "2024.11.17"
-            "1.21.7" -> "2025.07.18"
-            "1.21.9" -> "2025.10.05"
-            else -> error("No mappings specified for version $minecraft")
-        }
+        mappingsVersion = versionedProp("parchment")
     }
 
     metadata {
         modId = "retrocrash"
         modName = "Retro Crash Screen"
         modDescription = "Brings back the old crash screen"
-        modVersion = "1.0.1"
+        modVersion = "1.1.0"
         modGroup = "com.flooferland"
         modAuthor = "FlooferLand"
         modLicense = "LGPL"
@@ -50,18 +44,7 @@ modstitch {
         replacementProperties.populate {
             put("mod_issue_tracker", "https://github.com/FlooferLand/retrocrash/issues")
             put("minecraft_range", property("deps.minecraft_range") as String)
-
-            // https://minecraft.wiki/w/Pack_format
-            put("pack_format", when (property("deps.minecraft")) {
-                "1.16.5" -> 6
-                "1.18.2" -> 9
-                "1.19.2" -> 10
-                "1.20.1" -> 15
-                "1.21.1" -> 48
-                "1.21.7" -> 81
-                "1.21.9" -> 88
-                else -> throw IllegalArgumentException("Please store the resource pack version for ${property("deps.minecraft")} in build.gradle.kts! https://minecraft.wiki/w/Pack_format")
-            }.toString())
+            put("pack_format", versionedProp("pack_format"))
         }
     }
 
@@ -96,14 +79,14 @@ modstitch {
 
 // Stonecutter constants for mod loaders.
 // See https://stonecutter.kikugie.dev/stonecutter/guide/comments#condition-constants
-val constraint: String = name.split("-")[1]
+val loader: String = name.split("-")[1]
 val crash = System.getenv("DEV_CRASH") == "1"
 stonecutter {
     constants.putAll(
         mapOf(
-            "fabric" to (constraint == "fabric"),
-            "neoforge" to (constraint == "neoforge"),
-            "forge" to (constraint == "forge"),
+            "fabric" to (loader == "fabric"),
+            "neoforge" to (loader == "neoforge"),
+            "forge" to (loader == "forge"),
             "crash" to crash
         )
     )
@@ -165,10 +148,16 @@ msPublishing {
 // use the modstitch.createProxyConfigurations(sourceSets["client"]) function.
 dependencies {
     modstitch.loom {
-        prop("deps.fabric-api") {
-            modstitchModImplementation("net.fabricmc.fabric-api:fabric-api:${it}")
+        modstitchModApi("me.shedaniel.cloth:cloth-config-$loader:${versionedProp("cloth_config")}") {
+            if (loader == "fabric") exclude(group = "net.fabricmc.fabric-api")
+        }
+        if (loader == "fabric") {
+            prop("deps.modmenu") {
+                modstitchModImplementation("com.terraformersmc:modmenu:$it")
+                prop("deps.fabric_api") { fabricApi ->
+                    modstitchModRuntimeOnly("net.fabricmc.fabric-api:fabric-api:$fabricApi")
+                }
+            }
         }
     }
-
-    // Anything else in the dependencies block will be used for all platforms.
 }

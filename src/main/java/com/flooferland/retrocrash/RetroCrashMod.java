@@ -1,11 +1,13 @@
 package com.flooferland.retrocrash;
 
 import com.flooferland.retrocrash.util.RetroCrashUtils;
-import com.mojang.logging.LogUtils;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
+
+//? if >1.18 {
 import org.slf4j.Logger;
+import com.mojang.logging.LogUtils;
 //? } else {
 /*import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

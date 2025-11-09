@@ -7,9 +7,8 @@
     "environment": "client",
     "icon": "icon.png",
     "entrypoints": {
-        "main": [
-          "com.flooferland.retrocrash.loaders.fabric.FabricEntrypoint"
-        ]
+        "main": ["com.flooferland.retrocrash.loaders.fabric.FabricEntrypoint"],
+        "modmenu": ["com.flooferland.retrocrash.loaders.fabric.RetroCrashModMenu"]
     },
     "depends": {
         "minecraft": "${minecraft_range}"
