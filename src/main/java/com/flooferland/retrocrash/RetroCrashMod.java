@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class RetroCrashMod {
 	public static final Logger LOGGER = /*? if >1.17 { */ LogUtils.getLogger()/*? } else { */ /*LogManager.getLogger() *//*? } */;
+	public static final RetroCrashConfig config = RetroCrashConfig.Companion.load();
 
     public static void initialize() {
 		RetroCrashWindow.prepare();

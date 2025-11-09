@@ -30,9 +30,21 @@ public final class RetroCrashWindow {
 		// Workaround to fix a Swing crash (Minecraft's main thread runs headless and this breaks it)
 		System.setProperty("java.awt.headless", "false");
 
+		// Logo variation
 		var isMinceraft = RetroCrashUtils.randomInt(0, 100) == 13;
 		gameName = isMinceraft ? "minceraft" : "minecraft";
 		gameNameCapitalized = gameName.substring(0, 1).toUpperCase() + gameName.substring(1);
+
+		// Theming
+		try {
+			if (RetroCrashMod.config.nativeLook) {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} else {
+				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			}
+		} catch (Exception e) {
+			RetroCrashMod.LOGGER.warn("Unable to set UI look and feel: ", e);
+		}
 	}
 
 	static void run() {
@@ -40,7 +52,7 @@ public final class RetroCrashWindow {
 		if (report == null) return;
 		var mc = minecraft.getWindow();
 
-		frame = new JFrame("Minecraft") ;
+		frame = new JFrame(gameNameCapitalized);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(mc.getWidth(), mc.getHeight());
 		frame.setLocation(mc.getX(), mc.getY());
@@ -183,8 +195,6 @@ public final class RetroCrashWindow {
 		RetroCrashWindow.minecraft = minecraft;
 		RetroCrashWindow.report = report;
 		prepare();
-
-		RetroCrashMod.LOGGER.info("SPAWNING!");
 
 		// Shutting off Minecraft's window to replace it
 		var window = minecraft.getWindow();
