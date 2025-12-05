@@ -33,11 +33,12 @@ public class RetroCrashMod {
 		if (!RetroCrashUtils.devShouldCrash()) return;
 		
 		var minecraft = Minecraft.getInstance();
+		String message = "This is a test crash from the Retrocrash DEV_CRASH=1 flag, you should not be seeing this!";
 		//? if <1.21 {
 		/*minecraft.emergencySave();
-		minecraft.crash(new CrashReport("Crash", new Exception()));
+		minecraft.crash(new CrashReport("Crash", new Exception(message)));
 		*///?} else {
-		minecraft.emergencySaveAndCrash(new CrashReport("Crash", new Exception()));
+		minecraft.emergencySaveAndCrash(new CrashReport("Crash", new Exception(message)));
 		//?}
 	}
 }

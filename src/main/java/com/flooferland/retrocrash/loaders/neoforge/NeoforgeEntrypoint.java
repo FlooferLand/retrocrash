@@ -1,5 +1,5 @@
 //? if neoforge {
-/*package com.flooferland.retrocrash.loaders.neoforge;
+package com.flooferland.retrocrash.loaders.neoforge;
 
 import com.flooferland.retrocrash.RetroCrashMod;
 import net.neoforged.fml.common.Mod;
@@ -11,4 +11,4 @@ public class NeoforgeEntrypoint {
     }
 }
 
-*///?}
+//?}

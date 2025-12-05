@@ -35,11 +35,12 @@ stonecutter {
             loaders.forEach { version("$name-$it", mcVersion) }
 
         // Targets
-        // TODO: Add legacy forge back in
+        // TODO: Add modern Forge support (aka switch away from Modstitch because it sucks and has a bias)
         mc("1.16.5", loaders = listOf("fabric"))
-        mc("1.18.2", loaders = listOf("fabric"))
-        mc("1.19.2", loaders = listOf("fabric"))
-        mc("1.20.1", loaders = listOf("fabric"))
+        mc("1.18.2", loaders = listOf("fabric", "forge"))
+        mc("1.19.2", loaders = listOf("fabric", "forge"))
+        mc("1.19.4", loaders = listOf("fabric", "forge"))
+        mc("1.20.1", loaders = listOf("fabric", "forge"))
         mc("1.21.1", loaders = listOf("fabric", "neoforge"))
         mc("1.21.7", loaders = listOf("fabric", "neoforge"))
         mc("1.21.9", loaders = listOf("fabric", "neoforge"))

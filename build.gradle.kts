@@ -16,6 +16,20 @@ fun versionedProp(name: String): String {
     return findProperty(name) as? String ?: error("Unable to find versioned property '$name' for Minecraft $minecraft")
 }
 
+// Stonecutter constants for mod loaders.
+// See https://stonecutter.kikugie.dev/stonecutter/guide/comments#condition-constants
+val loader: String = name.split("-")[1]
+val crash = System.getenv("DEV_CRASH") == "1"
+stonecutter {
+    constants.putAll(
+        mapOf(
+            "fabric" to (loader == "fabric"),
+            "neoforge" to (loader == "neoforge"),
+            "forge" to (loader == "forge")
+        )
+    )
+}
+
 modstitch {
     minecraftVersion = minecraft
 
@@ -23,9 +37,14 @@ modstitch {
         stonecutter.eval(minecraft, ">=1.20.5") -> 21
         else -> 17
     }
+    println("Java version set to ${javaVersion.get()}")
 
-    parchment {
-        mappingsVersion = versionedProp("parchment")
+    if (stonecutter.eval(minecraft, ">1.17") || loader != "forge") {
+        parchment {
+            mappingsVersion = versionedProp("parchment")
+        }
+    } else {
+        println("TODO: Find a way to get pre-1.17 Forge mappings to work")
     }
 
     metadata {
@@ -77,19 +96,10 @@ modstitch {
     }
 }
 
-// Stonecutter constants for mod loaders.
-// See https://stonecutter.kikugie.dev/stonecutter/guide/comments#condition-constants
-val loader: String = name.split("-")[1]
-val crash = System.getenv("DEV_CRASH") == "1"
-stonecutter {
-    constants.putAll(
-        mapOf(
-            "fabric" to (loader == "fabric"),
-            "neoforge" to (loader == "neoforge"),
-            "forge" to (loader == "forge"),
-            "crash" to crash
-        )
-    )
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(modstitch.javaVersion.get()))
+    }
 }
 
 msPublishing {
