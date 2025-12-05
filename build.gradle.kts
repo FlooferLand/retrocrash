@@ -51,7 +51,7 @@ modstitch {
         modId = "retrocrash"
         modName = "Retro Crash Screen"
         modDescription = "Brings back the old crash screen"
-        modVersion = "1.1.0"
+        modVersion = "1.2.0"
         modGroup = "com.flooferland"
         modAuthor = "FlooferLand"
         modLicense = "LGPL"
