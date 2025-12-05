@@ -2,6 +2,7 @@ package com.flooferland.retrocrash;
 
 import com.flooferland.retrocrash.util.ResLoc;
 import com.flooferland.retrocrash.util.RetroCrashUtils;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.CrashReport;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +27,7 @@ public final class RetroCrashWindow {
 	static String gameNameCapitalized;
 	static @Nullable Throwable error;
 
-	public static void prepare() {
+	public static void prepare() throws RuntimeException {
 		// Workaround to fix a Swing crash (Minecraft's main thread runs headless and this breaks it)
 		System.setProperty("java.awt.headless", "false");
 
@@ -47,15 +48,17 @@ public final class RetroCrashWindow {
 		}
 	}
 
-	static void run() {
+	static void run() throws RuntimeException {
 		if (minecraft == null) return;
 		if (report == null) return;
-		var mc = minecraft.getWindow();
+		var mcWindow = getParentWindow();
 
 		frame = new JFrame(gameNameCapitalized);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setSize(mc.getWidth(), mc.getHeight());
-		frame.setLocation(mc.getX(), mc.getY());
+		if (mcWindow != null) {
+			frame.setSize(mcWindow.getWidth(), mcWindow.getHeight());
+			frame.setLocation(mcWindow.getX(), mcWindow.getY());
+		}
 
 		// Main
 		var mainPanel = new JPanel();
@@ -140,9 +143,9 @@ public final class RetroCrashWindow {
 		try {
 			//? if >1.19 {
 			logo = Objects.requireNonNull(resources.getResource(logoId).orElse(null)).open();
-			//? } else {
+			//?} else {
 			/*logo = resources.getResource(logoId).getInputStream();
-			*///? }
+			*///?}
 		} catch (IOException exception) {
 			error = exception;
 			return null;
@@ -158,7 +161,7 @@ public final class RetroCrashWindow {
 					error = throwable;
 					return null;
 				}
-			*///? }
+			*///?}
 			return image.getScaledInstance(310, 80, Image.SCALE_SMOOTH);
 		} catch (IOException e) {
 			error = e;
@@ -189,22 +192,24 @@ public final class RetroCrashWindow {
 		buffered.createGraphics().drawImage(scaled, 0, 0, null);
 		return buffered;
 	}
-	*///? }
+	*///?}
 
-	public static void spawn(Minecraft minecraft, CrashReport report) {
+	public static void spawn(Minecraft minecraft, CrashReport report) throws RuntimeException {
 		RetroCrashWindow.minecraft = minecraft;
 		RetroCrashWindow.report = report;
 		prepare();
 
 		// Shutting off Minecraft's window to replace it
-		var window = minecraft.getWindow();
-		long glfwWindow = //? if >1.21.7 {
-		/*window.handle();
-		*///?} else {
-		window.getWindow();
-		//?}
-		if (glfwWindow > 0) {
-			GLFW.glfwHideWindow(glfwWindow);
+		Window window = getParentWindow();
+		if (window != null) {
+			long glfwWindow = //? if >1.21.7 {
+			/*window.handle();
+			*///?} else {
+			window.getWindow();
+			//?}
+			if (glfwWindow > 0) {
+				GLFW.glfwHideWindow(glfwWindow);
+			}
 		}
 
 		// Running the window
@@ -226,5 +231,10 @@ public final class RetroCrashWindow {
 		} catch (InterruptedException e) {
 			RetroCrashMod.LOGGER.error("Failed to show window", e);
 		}
+	}
+
+	@Nullable public static Window getParentWindow() {
+		if (minecraft == null) return null;
+		return minecraft.getWindow();
 	}
 }

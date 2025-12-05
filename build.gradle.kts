@@ -134,6 +134,12 @@ msPublishing {
             minecraftVersions.addAll(stableMcVersions)
         }
 
+        curseforge {
+            accessToken = System.getenv("CURSEFORGE_TOKEN")
+            projectId = "1381812"
+            minecraftVersions.addAll(stableMcVersions)
+        }
+
         publishOptions {
             version = stonecutter.current.version
         }

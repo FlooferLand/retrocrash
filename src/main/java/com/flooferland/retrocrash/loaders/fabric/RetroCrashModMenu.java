@@ -1,7 +1,6 @@
 //? if fabric {
 package com.flooferland.retrocrash.loaders.fabric;
 
-import com.flooferland.retrocrash.RetroCrashMod;
 import com.flooferland.retrocrash.util.Comp;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
@@ -42,4 +41,4 @@ public class RetroCrashModMenu implements ModMenuApi {
 	}
 }
 
-//? }
+//?}

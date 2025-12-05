@@ -16,7 +16,7 @@ public class BasedGson<T> {
 	protected Gson internal = new GsonBuilder()
 		.serializeNulls()
 		.setLenient()
-		/*? if >1.20 */.disableJdkUnsafe()
+		/*? if >1.20*/.disableJdkUnsafe()
 		.setPrettyPrinting()
 		.excludeFieldsWithoutExposeAnnotation()
 		.create();

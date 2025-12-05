@@ -1,5 +1,6 @@
 package com.flooferland.retrocrash.mixin;
 
+import com.flooferland.retrocrash.RetroCrashMod;
 import com.flooferland.retrocrash.RetroCrashWindow;
 import com.flooferland.retrocrash.util.RetroCrashUtils;
 import net.minecraft.CrashReport;
@@ -18,15 +19,23 @@ public class MinecraftMixin {
 	//? if >1.21 {
 	@Inject(method = "crash", at = @At("HEAD"))
 	private static void beforeExit(Minecraft minecraft, File gameDirectory, CrashReport report, CallbackInfo ci) {
-		RetroCrashWindow.spawn(Minecraft.getInstance(), report);
+		try {
+			RetroCrashWindow.spawn(Minecraft.getInstance(), report);
+		} catch (Exception e) {
+			RetroCrashMod.LOGGER.error("Exception was thrown!", e);
+		}
 	}
 	//?} else {
 	/*@Inject(method = "crash", at = @At("HEAD"))
 	private static void beforeExit(CrashReport report, CallbackInfo ci) {
-		RetroCrashWindow.spawn(Minecraft.getInstance(), report);
+		try {
+			RetroCrashWindow.spawn(Minecraft.getInstance(), report);
+		} catch (Exception e) {
+			RetroCrashMod.LOGGER.error("Exception was thrown!", e);
+		}
 	}
 	*///?}
-	
+
 	@Inject(method = "run", at = @At("HEAD"))
 	private void initDevCrash(CallbackInfo ci) {
 		if (RetroCrashUtils.devShouldCrash())
