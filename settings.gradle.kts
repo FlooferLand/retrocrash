@@ -35,7 +35,7 @@ stonecutter {
             loaders.forEach { version("$name-$it", mcVersion) }
 
         // Targets
-        // TODO: Add modern Forge support (aka switch away from Modstitch because it sucks and has a bias)
+        // TODO: Add modern Forge support (switch away from Modstitch?)
         mc("1.16.5", loaders = listOf("fabric"))
         mc("1.18.2", loaders = listOf("fabric", "forge"))
         mc("1.19.2", loaders = listOf("fabric", "forge"))
